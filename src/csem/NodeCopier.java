@@ -40,16 +40,16 @@ public class NodeCopier{
     copy.setSourceLineNumber(beta.getSourceLineNumber());
     
     Stack<ASTNode> thenBodyCopy = new Stack<ASTNode>();
-    for(ASTNode thenBodyElement: beta.getThenBody()){
+    for(ASTNode thenBodyElement: beta.thenBody){
       thenBodyCopy.add(thenBodyElement.accept(this));
     }
-    copy.setThenBody(thenBodyCopy);
+    copy.thenBody=thenBodyCopy;
     
     Stack<ASTNode> elseBodyCopy = new Stack<ASTNode>();
-    for(ASTNode elseBodyElement: beta.getElseBody()){
+    for(ASTNode elseBodyElement: beta.elseBody){
       elseBodyCopy.add(elseBodyElement.accept(this));
     }
-    copy.setElseBody(elseBodyCopy);
+    copy.elseBody = elseBodyCopy;
     
     return copy;
   }

@@ -21,8 +21,12 @@ import ast.ASTNodeType;
  * @author Group 9
  */
 public class Beta extends ASTNode{
-  private Stack<ASTNode> thenBody;
-  private Stack<ASTNode> elseBody;
+
+  // private Stack<ASTNode> thenBody;
+  // private Stack<ASTNode> elseBody;
+
+  public Stack<ASTNode> thenBody;
+  public Stack<ASTNode> elseBody;
   
   public Beta(){
     setType(ASTNodeType.BETA);
