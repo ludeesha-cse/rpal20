@@ -7,12 +7,12 @@ Welcome to the VS Code Java world. Here is a guideline to help you get started t
 The workspace contains two folders by default, where:
 
 - `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+steps
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+ > make
+ // all the java files will be compiled & the compiled output files will be generated in the `bin` folder by default and all the java classes will be generated in seperated folders ast, csem, parser & scanner
 
-## Dependency Management
+ >java rpal20 <filename.extension>
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+* If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.

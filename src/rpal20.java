@@ -5,7 +5,8 @@ import parser.*;
 
 import java.io.IOException;
 
-public class App {
+//group 44
+public class rpal20 {
     public static void main(String[] args) throws Exception {
         String fileName = args[0];//input file
         AST ast = null;
