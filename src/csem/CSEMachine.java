@@ -98,7 +98,7 @@ public class CSEMachine{
     AST_Nd rand1 = stack_Value.pop();
     AST_Nd rand2 = stack_Value.pop();
     if(rand1.type!=AST_Nd_Type.INTEGER || rand2.type!=AST_Nd_Type.INTEGER)
-      EvaluationError.printError(rand1.sourceLineNumber, "Expected two integers; was given \""+rand1.value+"\", \""+rand2.value+"\"");
+      Evl_Err.printError(rand1.sourceLineNumber, "Expected two integers; was given \""+rand1.value+"\", \""+rand2.value+"\"");
 
     AST_Nd result = new AST_Nd();
     result.setType(AST_Nd_Type.INTEGER);
@@ -155,20 +155,20 @@ public class CSEMachine{
 
     if(rand1.type==AST_Nd_Type.TRUE || rand1.type==AST_Nd_Type.FALSE){
       if(rand2.type!=AST_Nd_Type.TRUE && rand2.type!=AST_Nd_Type.FALSE)
-        EvaluationError.printError(rand1.sourceLineNumber, "Cannot compare dissimilar types; was given \""+rand1.value+"\", \""+rand2.value+"\"");
+        Evl_Err.printError(rand1.sourceLineNumber, "Cannot compare dissimilar types; was given \""+rand1.value+"\", \""+rand2.value+"\"");
       compareTruthValues(rand1, rand2, type);
       return;
     }
 
     if(rand1.type!=rand2.type)
-      EvaluationError.printError(rand1.sourceLineNumber, "Cannot compare dissimilar types; was given \""+rand1.value+"\", \""+rand2.value+"\"");
+      Evl_Err.printError(rand1.sourceLineNumber, "Cannot compare dissimilar types; was given \""+rand1.value+"\", \""+rand2.value+"\"");
 
     if(rand1.type==AST_Nd_Type.STRING)
       compareStrings(rand1, rand2, type);
     else if(rand1.type==AST_Nd_Type.INTEGER)
       compareIntegers(rand1, rand2, type);
     else
-      EvaluationError.printError(rand1.sourceLineNumber, "Don't know how to " + type + " \""+rand1.value+"\", \""+rand2.value+"\"");
+      Evl_Err.printError(rand1.sourceLineNumber, "Don't know how to " + type + " \""+rand1.value+"\", \""+rand2.value+"\"");
 
   }
 
@@ -221,7 +221,7 @@ public class CSEMachine{
       return;
     }
 
-    EvaluationError.printError(rand1.sourceLineNumber, "Don't know how to " + type + " \""+rand1.value+"\", \""+rand2.value+"\"");
+    Evl_Err.printError(rand1.sourceLineNumber, "Don't know how to " + type + " \""+rand1.value+"\", \""+rand2.value+"\"");
   }
 
   private void orAndTruthValues(AST_Nd rand1, AST_Nd rand2, AST_Nd_Type type){
@@ -244,7 +244,7 @@ public class CSEMachine{
     AST_Nd rand2 = stack_Value.pop();
 
     if(rand1.type!=AST_Nd_Type.TUPLE)
-      EvaluationError.printError(rand1.sourceLineNumber, "Cannot augment a non-tuple \""+rand1.value+"\"");
+      Evl_Err.printError(rand1.sourceLineNumber, "Cannot augment a non-tuple \""+rand1.value+"\"");
 
     AST_Nd childNode = rand1.child;
     if(childNode==null)
@@ -276,7 +276,7 @@ public class CSEMachine{
   private void not(){
     AST_Nd rand = stack_Value.pop();
     if(rand.type!=AST_Nd_Type.TRUE && rand.type!=AST_Nd_Type.FALSE)
-      EvaluationError.printError(rand.sourceLineNumber, "Expecting a truthvalue; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expecting a truthvalue; was given \""+rand.value+"\"");
 
     if(rand.type==AST_Nd_Type.TRUE)
       pushFalseNode();
@@ -287,7 +287,7 @@ public class CSEMachine{
   private void neg(){
     AST_Nd rand = stack_Value.pop();
     if(rand.type!=AST_Nd_Type.INTEGER)
-      EvaluationError.printError(rand.sourceLineNumber, "Expecting a truthvalue; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expecting a truthvalue; was given \""+rand.value+"\"");
 
     AST_Nd result = new AST_Nd();
     result.setType(AST_Nd_Type.INTEGER);
@@ -314,7 +314,7 @@ public class CSEMachine{
       //RULE 11
       else{
         if(rand.type!=AST_Nd_Type.TUPLE)
-          EvaluationError.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
+          Evl_Err.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
         
         for(int i = 0; i < nextDelta.boundVars.size(); i++){
           newEnv.doMapping(nextDelta.boundVars.get(i), getNthTupleChild((Tau)rand, i+1)); //+ 1 coz tuple indexing starts at 1
@@ -327,7 +327,7 @@ public class CSEMachine{
     else if(rator.type==AST_Nd_Type.YSTAR){
       //RULE 12
       if(rand.type!=AST_Nd_Type.DELTA)
-        EvaluationError.printError(rand.sourceLineNumber, "Expected a Delta; was given \""+rand.value+"\"");
+        Evl_Err.printError(rand.sourceLineNumber, "Expected a Delta; was given \""+rand.value+"\"");
       
       Eta etaNode = new Eta();
       etaNode.setDelta((Delta)rand);
@@ -352,7 +352,7 @@ public class CSEMachine{
     else if(evaluateReservedIdentifiers(rator, rand, currentControlStack))
       return;
     else
-      EvaluationError.printError(rator.sourceLineNumber, "Don't know how to evaluate \""+rator.value+"\"");
+      Evl_Err.printError(rator.sourceLineNumber, "Don't know how to evaluate \""+rator.value+"\"");
   }
 
   private boolean evaluateReservedIdentifiers(AST_Nd rator, AST_Nd rand, Stack<AST_Nd> currentControlStack){
@@ -436,7 +436,7 @@ public class CSEMachine{
 
   private void stem(AST_Nd rand){
     if(rand.type!=AST_Nd_Type.STRING)
-      EvaluationError.printError(rand.sourceLineNumber, "Expected a string; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expected a string; was given \""+rand.value+"\"");
     
     if(rand.value.isEmpty())
       rand.setValue("");
@@ -448,7 +448,7 @@ public class CSEMachine{
 
   private void stern(AST_Nd rand){
     if(rand.type!=AST_Nd_Type.STRING)
-      EvaluationError.printError(rand.sourceLineNumber, "Expected a string; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expected a string; was given \""+rand.value+"\"");
     
     if(rand.value.isEmpty() || rand.value.length()==1)
       rand.setValue("");
@@ -462,7 +462,7 @@ public class CSEMachine{
     currentControlStack.pop();
     AST_Nd rand2 = stack_Value.pop();
     if(rand1.type!=AST_Nd_Type.STRING || rand2.type!=AST_Nd_Type.STRING)
-      EvaluationError.printError(rand1.sourceLineNumber, "Expected two strings; was given \""+rand1.value+"\", \""+rand2.value+"\"");
+      Evl_Err.printError(rand1.sourceLineNumber, "Expected two strings; was given \""+rand1.value+"\", \""+rand2.value+"\"");
 
     AST_Nd result = new AST_Nd();
     result.setType(AST_Nd_Type.STRING);
@@ -473,7 +473,7 @@ public class CSEMachine{
 
   private void itos(AST_Nd rand){
     if(rand.type!=AST_Nd_Type.INTEGER)
-      EvaluationError.printError(rand.sourceLineNumber, "Expected an integer; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expected an integer; was given \""+rand.value+"\"");
     
     rand.setType(AST_Nd_Type.STRING); //all values are stored internally as strings
     stack_Value.push(rand);
@@ -481,7 +481,7 @@ public class CSEMachine{
 
   private void order(AST_Nd rand){
     if(rand.type!=AST_Nd_Type.TUPLE)
-      EvaluationError.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
 
     AST_Nd result = new AST_Nd();
     result.setType(AST_Nd_Type.INTEGER);
@@ -492,7 +492,7 @@ public class CSEMachine{
 
   private void isNullTuple(AST_Nd rand){
     if(rand.type!=AST_Nd_Type.TUPLE)
-      EvaluationError.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Expected a tuple; was given \""+rand.value+"\"");
 
     if(getNumChildren(rand)==0)
       pushTrueNode();
@@ -503,11 +503,11 @@ public class CSEMachine{
   // RULE 10
   private void tupleSelection(Tau rator, AST_Nd rand){
     if(rand.type!=AST_Nd_Type.INTEGER)
-      EvaluationError.printError(rand.sourceLineNumber, "Non-integer tuple selection with \""+rand.value+"\"");
+      Evl_Err.printError(rand.sourceLineNumber, "Non-integer tuple selection with \""+rand.value+"\"");
 
     AST_Nd result = getNthTupleChild(rator, Integer.parseInt(rand.value));
     if(result==null)
-      EvaluationError.printError(rand.sourceLineNumber, "Tuple selection index "+rand.value+" out of bounds");
+      Evl_Err.printError(rand.sourceLineNumber, "Tuple selection index "+rand.value+" out of bounds");
 
     stack_Value.push(result);
   }
@@ -534,7 +534,7 @@ public class CSEMachine{
     else if(isReservedIdentifier(node.value))
       stack_Value.push(node);
     else
-      EvaluationError.printError(node.sourceLineNumber, "Undeclared identifier \""+node.value+"\"");
+      Evl_Err.printError(node.sourceLineNumber, "Undeclared identifier \""+node.value+"\"");
   }
 
   //RULE 9
@@ -569,7 +569,7 @@ public class CSEMachine{
     AST_Nd conditionResultNode = stack_Value.pop();
 
     if(conditionResultNode.type!=AST_Nd_Type.TRUE && conditionResultNode.type!=AST_Nd_Type.FALSE)
-      EvaluationError.printError(conditionResultNode.sourceLineNumber, "Expecting a truthvalue; found \""+conditionResultNode.value+"\"");
+      Evl_Err.printError(conditionResultNode.sourceLineNumber, "Expecting a truthvalue; found \""+conditionResultNode.value+"\"");
 
     if(conditionResultNode.type==AST_Nd_Type.TRUE)
       currentControlStack.addAll(node.then_Part);

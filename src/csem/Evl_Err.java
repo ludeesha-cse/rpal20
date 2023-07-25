@@ -2,7 +2,7 @@ package csem;
 
 
 
-public class EvaluationError{
+public class Evl_Err{
   
   public static void printError(int srcLineNumber, String msg){
     
