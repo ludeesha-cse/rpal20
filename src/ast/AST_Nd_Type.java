@@ -1,8 +1,8 @@
 package ast;
 
 /**
- * Type of abstract syntax tree node. As specified in the RPAL phrase structure grammar.
- * @author Group 9
+ * Type of abstract syntax tree node
+ 
  */
 public enum AST_Nd_Type{
   //General
@@ -61,13 +61,13 @@ public enum AST_Nd_Type{
   //Post-standardize
   YSTAR("<Y*>"),
   
-  //For program evaluation only. Will never appear in a standardized or non-standardized AST. 
+  //For program evaluation only
   BETA(""),
   DELTA(""),
   ETA(""),
   TUPLE("");
   
-  private String printName; //used for printing AST representation
+  private String printName; //printing AST representation
   
   private AST_Nd_Type(String name){
     printName = name;

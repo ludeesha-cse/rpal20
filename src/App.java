@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        String fileName = args[0];
+        String fileName = args[0];//input file
         AST ast = null;
         ast = buildAST(fileName, true);
         // ast.print();
@@ -22,14 +22,14 @@ public class App {
           Parser parser = new Parser(scanner);
           ast = parser.buildAST();
         }catch(IOException e){
-          throw new ParseException("ERROR: Could not read from file: " + fileName);
+          throw new Parser_Exception("ERROR: Could not read from file: " + fileName);
         }
         return ast;
       }
     
       private static void evaluateST(AST ast){
-        CSEMachine csem = new CSEMachine(ast);
-        csem.evaluateProgram();
+        CSEMachine cseMachine = new CSEMachine(ast);
+        cseMachine.evaluate_Program();
         System.out.println();
       }
 

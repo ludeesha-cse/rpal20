@@ -4,13 +4,10 @@ import ast.AST_Nd;
 import ast.AST_Nd_Type;
 
 /**
- * Represents the fixed-point resulting from the application (Y F). We never
- * actually evaluate the fixed-point. The hope is that the program will (in the
- * recursion's base case) choose the option that doesn't have the fixed point (and
- * hence will not lead to our evaluating the fixed point again (what happens when
- * we replace YF with F (YF) i.e., Eta with Delta Eta)). If the source code creates
- * an infinite recursion, none of these tricks will save us.
- * @author Group 9
+ * Represents the fixed-point
+ */
+/**
+ * The Eta class represents an eta closure with a delta object.
  */
 public class Eta extends AST_Nd{
   private Delta delta;
@@ -19,13 +16,12 @@ public class Eta extends AST_Nd{
     setType(AST_Nd_Type.ETA);
   }
   
-  //used if the program evaluation results in a partial application
-  @Override
+  
   public String getValue(){
-    return "[eta closure: "+delta.getBoundVars().get(0)+": "+delta.getIndex()+"]";
+    return "[eta closure: "+delta.boundVars.get(0)+": "+delta.index+"]";
   }
   
-  public Eta accept(NodeCopier nodeCopier){
+  public Eta acceptNode(NodeCopier nodeCopier){
     return nodeCopier.copy(this);
   }
 

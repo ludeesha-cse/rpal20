@@ -9,13 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Scanner: Combines a lexer and a screener. Complies with RPAL's Lexicon.
- * @author Group 9
+ * Scanner
  */
 public class Scanner{
   private BufferedReader buffer;
-  private String extraCharRead;
-  private final List<String> reservedIdentifiers = Arrays.asList(new String[]{"let","in","within","fn","where","aug","or",
+  private String charRead;
+  private final List<String> reservedID = Arrays.asList(new String[]{"let","in","within","fn","where","aug","or",
                                                                               "not","gr","ge","ls","le","eq","ne","true",
                                                                               "false","nil","dummy","rec","and"});
   private int sourceLineNumber;
@@ -25,16 +24,14 @@ public class Scanner{
     buffer = new BufferedReader(new InputStreamReader(new FileInputStream(new File(inputFile))));
   }
   
-  /**
-   * Returns next token from input file
-   * @return null if the file has ended
-   */
+  
+  // The `readNextToken()` method is responsible for reading the next token from the input file.
   public Token readNextToken(){
     Token nextToken = null;
     String nextChar;
-    if(extraCharRead!=null){
-      nextChar = extraCharRead;
-      extraCharRead = null;
+    if(charRead!=null){
+      nextChar = charRead;
+      charRead = null;
     } else
       nextChar = readNextChar();
     if(nextChar!=null)
@@ -56,146 +53,134 @@ public class Scanner{
     return nextChar;
   }
 
-  /**
-   * Builds next token from input
-   * @param currentChar character currently being processed 
-   * @return token that was built
-   */
+  
+  // The `buildToken` method is responsible for determining the type of token based on the current
+  // character being processed and calling the appropriate method to build that token. It checks the
+  // current character against different regular expression patterns to determine the token type. If
+  // the current character matches a letter pattern, it calls the `buildIdentifierToken` method. If it
+  // matches a digit pattern, it calls the `buildIntegerToken` method. If it matches an operator symbol
+  // pattern, it calls the `buildOperatorToken` method. If the current character is a single quote, it
+  // calls the `buildStringToken` method. If it matches a space pattern, it calls the `buildSpaceToken`
+  // method. If it matches a punctuation pattern, it calls the `buildPunctuationPattern` method. The
+  // method returns the built token.
   private Token buildToken(String currentChar){
     Token nextToken = null;
-    if(LexicalRegexPatterns.LetterPattern.matcher(currentChar).matches()){
+    if(Lxcl_Rgx_Patterns.LetterPattern.matcher(currentChar).matches()){
       nextToken = buildIdentifierToken(currentChar);
     }
-    else if(LexicalRegexPatterns.DigitPattern.matcher(currentChar).matches()){
+    else if(Lxcl_Rgx_Patterns.DigitPattern.matcher(currentChar).matches()){
       nextToken = buildIntegerToken(currentChar);
     }
-    else if(LexicalRegexPatterns.OpSymbolPattern.matcher(currentChar).matches()){ //comment tokens are also entered from here
+    else if(Lxcl_Rgx_Patterns.OpSymbolPattern.matcher(currentChar).matches()){ 
       nextToken = buildOperatorToken(currentChar);
     }
     else if(currentChar.equals("\'")){
       nextToken = buildStringToken(currentChar);
     }
-    else if(LexicalRegexPatterns.SpacePattern.matcher(currentChar).matches()){
+    else if(Lxcl_Rgx_Patterns.SpacePattern.matcher(currentChar).matches()){
       nextToken = buildSpaceToken(currentChar);
     }
-    else if(LexicalRegexPatterns.PunctuationPattern.matcher(currentChar).matches()){
+    else if(Lxcl_Rgx_Patterns.PunctuationPattern.matcher(currentChar).matches()){
       nextToken = buildPunctuationPattern(currentChar);
     }
     return nextToken;
   }
 
-  /**
-   * Builds Identifier token.
-   * Identifier -> Letter (Letter | Digit | '_')*
-   * @param currentChar character currently being processed 
-   * @return token that was built
-   */
-  private Token buildIdentifierToken(String currentChar){
-    Token identifierToken = new Token();
-    identifierToken.setType(TokenType.IDENTIFIER);
-    identifierToken.setSourceLineNumber(sourceLineNumber);
-    StringBuilder sBuilder = new StringBuilder(currentChar);
+  
+  private Token buildIdentifierToken(String current_C){
+    Token identifier_T = new Token();
+    identifier_T.setType(TKN_Type.IDENTIFIER);
+    identifier_T.setSourceLineNumber(sourceLineNumber);
+    StringBuilder sBuilder = new StringBuilder(current_C);
     
     String nextChar = readNextChar();
-    while(nextChar!=null){ //null indicates the file ended
-      if(LexicalRegexPatterns.IdentifierPattern.matcher(nextChar).matches()){
+    while(nextChar!=null){
+      if(Lxcl_Rgx_Patterns.IdentifierPattern.matcher(nextChar).matches()){
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
       else{
-        extraCharRead = nextChar;
+        charRead = nextChar;
         break;
       }
     }
     
     String value = sBuilder.toString();
-    if(reservedIdentifiers.contains(value))
-      identifierToken.setType(TokenType.RESERVED);
+    if(reservedID.contains(value))
+      identifier_T.setType(TKN_Type.RESERVED);
     
-    identifierToken.setValue(value);
-    return identifierToken;
+    identifier_T.setValue(value);
+    return identifier_T;
   }
 
-  /**
-   * Builds integer token.
-   * Integer -> Digit+
-   * @param currentChar character currently being processed 
-   * @return token that was built
-   */
-  private Token buildIntegerToken(String currentChar){
-    Token integerToken = new Token();
-    integerToken.setType(TokenType.INTEGER);
-    integerToken.setSourceLineNumber(sourceLineNumber);
-    StringBuilder sBuilder = new StringBuilder(currentChar);
+  
+  private Token buildIntegerToken(String current_C){
+    Token integer_T = new Token();
+    integer_T.setType(TKN_Type.INTEGER);
+    integer_T.setSourceLineNumber(sourceLineNumber);
+    StringBuilder sBuilder = new StringBuilder(current_C);
     
     String nextChar = readNextChar();
-    while(nextChar!=null){ //null indicates the file ended
-      if(LexicalRegexPatterns.DigitPattern.matcher(nextChar).matches()){
+    while(nextChar!=null){ 
+      if(Lxcl_Rgx_Patterns.DigitPattern.matcher(nextChar).matches()){
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
       else{
-        extraCharRead = nextChar;
+        charRead = nextChar;
         break;
       }
     }
     
-    integerToken.setValue(sBuilder.toString());
-    return integerToken;
+    integer_T.setValue(sBuilder.toString());
+    return integer_T;
   }
 
-  /**
-   * Builds operator token.
-   * Operator -> Operator_symbol+
-   * @param currentChar character currently being processed 
-   * @return token that was built
-   */
-  private Token buildOperatorToken(String currentChar){
-    Token opSymbolToken = new Token();
-    opSymbolToken.setType(TokenType.OPERATOR);
-    opSymbolToken.setSourceLineNumber(sourceLineNumber);
-    StringBuilder sBuilder = new StringBuilder(currentChar);
+
+  private Token buildOperatorToken(String current_C){
+    Token opSymbol_T = new Token();
+    opSymbol_T.setType(TKN_Type.OPERATOR);
+    opSymbol_T.setSourceLineNumber(sourceLineNumber);
+    StringBuilder sBuilder = new StringBuilder(current_C);
     
     String nextChar = readNextChar();
     
-    if(currentChar.equals("/") && nextChar.equals("/"))
-      return buildCommentToken(currentChar+nextChar);
+    if(current_C.equals("/") && nextChar.equals("/"))
+      return buildCommentToken(current_C+nextChar);
     
-    while(nextChar!=null){ //null indicates the file ended
-      if(LexicalRegexPatterns.OpSymbolPattern.matcher(nextChar).matches()){
+    while(nextChar!=null){ 
+      if(Lxcl_Rgx_Patterns.OpSymbolPattern.matcher(nextChar).matches()){
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
       else{
-        extraCharRead = nextChar;
+        charRead = nextChar;
         break;
       }
     }
     
-    opSymbolToken.setValue(sBuilder.toString());
-    return opSymbolToken;
+    opSymbol_T.setValue(sBuilder.toString());
+    return opSymbol_T;
   }
 
   /**
    * Builds string token.
-   * String -> '''' ('\' 't' | '\' 'n' | '\' '\' | '\' '''' |'(' | ')' | ';' | ',' |'' |Letter | Digit | Operator_symbol )* ''''
-   * @param currentChar character currently being processed 
-   * @return token that was built
+  
    */
-  private Token buildStringToken(String currentChar){
-    Token stringToken = new Token();
-    stringToken.setType(TokenType.STRING);
-    stringToken.setSourceLineNumber(sourceLineNumber);
+  private Token buildStringToken(String current_C){
+    Token string_T = new Token();
+    string_T.setType(TKN_Type.STRING);
+    string_T.setSourceLineNumber(sourceLineNumber);
     StringBuilder sBuilder = new StringBuilder("");
     
     String nextChar = readNextChar();
-    while(nextChar!=null){ //null indicates the file ended
-      if(nextChar.equals("\'")){ //we just used up the last char we read, hence no need to set extraCharRead
-        //sBuilder.append(nextChar);
-        stringToken.setValue(sBuilder.toString());
-        return stringToken;
+    while(nextChar!=null){ 
+      if(nextChar.equals("\'")){ 
+        
+        string_T.setValue(sBuilder.toString());
+        return string_T;
       }
-      else if(LexicalRegexPatterns.StringPattern.matcher(nextChar).matches()){ //match Letter | Digit | Operator_symbol
+      else if(Lxcl_Rgx_Patterns.StringPattern.matcher(nextChar).matches()){ 
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
@@ -204,37 +189,37 @@ public class Scanner{
     return null;
   }
   
-  private Token buildSpaceToken(String currentChar){
-    Token deleteToken = new Token();
-    deleteToken.setType(TokenType.DELETE);
-    deleteToken.setSourceLineNumber(sourceLineNumber);
-    StringBuilder sBuilder = new StringBuilder(currentChar);
+  private Token buildSpaceToken(String current_C){
+    Token delete_T = new Token();
+    delete_T.setType(TKN_Type.DELETE);
+    delete_T.setSourceLineNumber(sourceLineNumber);
+    StringBuilder sBuilder = new StringBuilder(current_C);
     
     String nextChar = readNextChar();
-    while(nextChar!=null){ //null indicates the file ended
-      if(LexicalRegexPatterns.SpacePattern.matcher(nextChar).matches()){
+    while(nextChar!=null){ 
+      if(Lxcl_Rgx_Patterns.SpacePattern.matcher(nextChar).matches()){
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
       else{
-        extraCharRead = nextChar;
+        charRead = nextChar;
         break;
       }
     }
     
-    deleteToken.setValue(sBuilder.toString());
-    return deleteToken;
+    delete_T.setValue(sBuilder.toString());
+    return delete_T;
   }
   
-  private Token buildCommentToken(String currentChar){
-    Token commentToken = new Token();
-    commentToken.setType(TokenType.DELETE);
-    commentToken.setSourceLineNumber(sourceLineNumber);
-    StringBuilder sBuilder = new StringBuilder(currentChar);
+  private Token buildCommentToken(String current_C){
+    Token comment_T = new Token();
+    comment_T.setType(TKN_Type.DELETE);
+    comment_T.setSourceLineNumber(sourceLineNumber);
+    StringBuilder sBuilder = new StringBuilder(current_C);
     
     String nextChar = readNextChar();
-    while(nextChar!=null){ //null indicates the file ended
-      if(LexicalRegexPatterns.CommentPattern.matcher(nextChar).matches()){
+    while(nextChar!=null){ 
+      if(Lxcl_Rgx_Patterns.CommentPattern.matcher(nextChar).matches()){
         sBuilder.append(nextChar);
         nextChar = readNextChar();
       }
@@ -242,24 +227,24 @@ public class Scanner{
         break;
     }
     
-    commentToken.setValue(sBuilder.toString());
-    return commentToken;
+    comment_T.setValue(sBuilder.toString());
+    return comment_T;
   }
 
-  private Token buildPunctuationPattern(String currentChar){
-    Token punctuationToken = new Token();
-    punctuationToken.setSourceLineNumber(sourceLineNumber);
-    punctuationToken.setValue(currentChar);
-    if(currentChar.equals("("))
-      punctuationToken.setType(TokenType.L_PAREN);
-    else if(currentChar.equals(")"))
-      punctuationToken.setType(TokenType.R_PAREN);
-    else if(currentChar.equals(";"))
-      punctuationToken.setType(TokenType.SEMICOLON);
-    else if(currentChar.equals(","))
-      punctuationToken.setType(TokenType.COMMA);
+  private Token buildPunctuationPattern(String current_C){
+    Token punctuation_T = new Token();
+    punctuation_T.setSourceLineNumber(sourceLineNumber);
+    punctuation_T.setValue(current_C);
+    if(current_C.equals("("))
+      punctuation_T.setType(TKN_Type.L_PAREN);
+    else if(current_C.equals(")"))
+      punctuation_T.setType(TKN_Type.R_PAREN);
+    else if(current_C.equals(";"))
+      punctuation_T.setType(TKN_Type.SEMICOLON);
+    else if(current_C.equals(","))
+      punctuation_T.setType(TKN_Type.COMMA);
     
-    return punctuationToken;
+    return punctuation_T;
   }
 }
 
