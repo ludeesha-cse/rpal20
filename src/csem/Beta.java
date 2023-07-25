@@ -2,8 +2,8 @@ package csem;
 
 import java.util.Stack;
 
-import ast.ASTNode;
-import ast.ASTNodeType;
+import ast.AST_Nd;
+import ast.AST_Nd_Type;
 
 /**
  * Used to evaluate conditionals.
@@ -20,33 +20,33 @@ import ast.ASTNodeType;
  * allows breaking out of infinite recursion.
  * @author Group 9
  */
-public class Beta extends ASTNode{
-  private Stack<ASTNode> thenBody;
-  private Stack<ASTNode> elseBody;
+public class Beta extends AST_Nd{
+  private Stack<AST_Nd> thenBody;
+  private Stack<AST_Nd> elseBody;
   
   public Beta(){
-    setType(ASTNodeType.BETA);
-    thenBody = new Stack<ASTNode>();
-    elseBody = new Stack<ASTNode>();
+    setType(AST_Nd_Type.BETA);
+    thenBody = new Stack<AST_Nd>();
+    elseBody = new Stack<AST_Nd>();
   }
   
   public Beta accept(NodeCopier nodeCopier){
     return nodeCopier.copy(this);
   }
 
-  public Stack<ASTNode> getThenBody(){
+  public Stack<AST_Nd> getThenBody(){
     return thenBody;
   }
 
-  public Stack<ASTNode> getElseBody(){
+  public Stack<AST_Nd> getElseBody(){
     return elseBody;
   }
 
-  public void setThenBody(Stack<ASTNode> thenBody){
+  public void setThenBody(Stack<AST_Nd> thenBody){
     this.thenBody = thenBody;
   }
 
-  public void setElseBody(Stack<ASTNode> elseBody){
+  public void setElseBody(Stack<AST_Nd> elseBody){
     this.elseBody = elseBody;
   }
   

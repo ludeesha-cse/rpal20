@@ -4,21 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-import ast.ASTNode;
-import ast.ASTNodeType;
+import ast.AST_Nd;
+import ast.AST_Nd_Type;
 
 /**
  * Represents a lambda closure.
  * @author Group 9
  */
-public class Delta extends ASTNode{
+public class Delta extends AST_Nd{
   private List<String> boundVars;
   private Environment linkedEnv; //environment in effect when this Delta was pushed on to the value stack
-  private Stack<ASTNode> body;
+  private Stack<AST_Nd> body;
   private int index;
   
   public Delta(){
-    setType(ASTNodeType.DELTA);
+    setType(AST_Nd_Type.DELTA);
     boundVars = new ArrayList<String>();
   }
   
@@ -44,11 +44,11 @@ public class Delta extends ASTNode{
     this.boundVars = boundVars;
   }
   
-  public Stack<ASTNode> getBody(){
+  public Stack<AST_Nd> getBody(){
     return body;
   }
   
-  public void setBody(Stack<ASTNode> body){
+  public void setBody(Stack<AST_Nd> body){
     this.body = body;
   }
   

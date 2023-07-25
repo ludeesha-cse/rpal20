@@ -4,7 +4,7 @@ package ast;
  * Type of abstract syntax tree node. As specified in the RPAL phrase structure grammar.
  * @author Group 9
  */
-public enum ASTNodeType{
+public enum AST_Nd_Type{
   //General
   IDENTIFIER("<ID:%s>"),
   STRING("<STR:'%s'>"),
@@ -69,7 +69,7 @@ public enum ASTNodeType{
   
   private String printName; //used for printing AST representation
   
-  private ASTNodeType(String name){
+  private AST_Nd_Type(String name){
     printName = name;
   }
 

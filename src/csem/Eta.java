@@ -1,7 +1,7 @@
 package csem;
 
-import ast.ASTNode;
-import ast.ASTNodeType;
+import ast.AST_Nd;
+import ast.AST_Nd_Type;
 
 /**
  * Represents the fixed-point resulting from the application (Y F). We never
@@ -12,11 +12,11 @@ import ast.ASTNodeType;
  * an infinite recursion, none of these tricks will save us.
  * @author Group 9
  */
-public class Eta extends ASTNode{
+public class Eta extends AST_Nd{
   private Delta delta;
   
   public Eta(){
-    setType(ASTNodeType.ETA);
+    setType(AST_Nd_Type.ETA);
   }
   
   //used if the program evaluation results in a partial application

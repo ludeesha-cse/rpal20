@@ -3,14 +3,14 @@ package csem;
 import java.util.HashMap;
 import java.util.Map;
 
-import ast.ASTNode;
+import ast.AST_Nd;
 
 public class Environment{
   private Environment parent;
-  private Map<String, ASTNode> nameValueMap;
+  private Map<String, AST_Nd> nameValueMap;
   
   public Environment(){
-    nameValueMap = new HashMap<String, ASTNode>();
+    nameValueMap = new HashMap<String, AST_Nd>();
   }
 
   public Environment getParent(){
@@ -29,9 +29,9 @@ public class Environment{
    * @return ASTNode that corresponds to the mapping of the key passed in as an argument
    *         or null if no mapping was found
    */
-  public ASTNode lookup(String key){
-    ASTNode retValue = null;
-    Map<String, ASTNode> map = nameValueMap;
+  public AST_Nd lookup(String key){
+    AST_Nd retValue = null;
+    Map<String, AST_Nd> map = nameValueMap;
     
     retValue = map.get(key);
     
@@ -44,7 +44,7 @@ public class Environment{
       return null;
   }
   
-  public void addMapping(String key, ASTNode value){
+  public void addMapping(String key, AST_Nd value){
     nameValueMap.put(key, value);
   }
 }

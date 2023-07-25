@@ -1,17 +1,17 @@
 package csem;
 
-import ast.ASTNode;
-import ast.ASTNodeType;
+import ast.AST_Nd;
+import ast.AST_Nd_Type;
 
-public class Tuple extends ASTNode{
+public class Tuple extends AST_Nd{
   
   public Tuple(){
-    setType(ASTNodeType.TUPLE);
+    setType(AST_Nd_Type.TUPLE);
   }
   
   @Override
   public String getValue(){
-    ASTNode childNode = getChild();
+    AST_Nd childNode = getChild();
     if(childNode==null)
       return "nil";
     

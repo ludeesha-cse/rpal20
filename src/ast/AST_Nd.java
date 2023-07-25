@@ -6,38 +6,38 @@ import csem.NodeCopier;
  * Abstract Syntax Tree node. Uses a first-child, next-sibling representation.
  * @author Group 9
  */
-public class ASTNode{
-  private ASTNodeType type;
-  private String value;
-  private ASTNode child;
-  private ASTNode sibling;
-  private int sourceLineNumber;
+public class AST_Nd{
+  public AST_Nd_Type type;
+  public String value;
+  public AST_Nd child;
+  public AST_Nd sibling;
+  public int sourceLineNumber;
   
   public String getName(){
     return type.name();
   }
 
-  public ASTNodeType getType(){
-    return type;
-  }
+  // public AST_Nd_Type getType(){
+  //   return type;
+  // }
 
-  public void setType(ASTNodeType type){
+  public void setType(AST_Nd_Type type){
     this.type = type;
   }
 
-  public ASTNode getChild(){
+  public AST_Nd getChild(){
     return child;
   }
 
-  public void setChild(ASTNode child){
+  public void setChild(AST_Nd child){
     this.child = child;
   }
 
-  public ASTNode getSibling(){
+  public AST_Nd getSibling(){
     return sibling;
   }
 
-  public void setSibling(ASTNode sibling){
+  public void setSibling(AST_Nd sibling){
     this.sibling = sibling;
   }
 
@@ -49,7 +49,7 @@ public class ASTNode{
     this.value = value;
   }
 
-  public ASTNode accept(NodeCopier nodeCopier){
+  public AST_Nd accept(NodeCopier nodeCopier){
     return nodeCopier.copy(this);
   }
 
