@@ -11,7 +11,7 @@ The workspace contains two folders by default, where:
 steps
 
  > make
- // all the java files will be compiled & the compiled output files will be generated in the `bin` folder by default and all the java classes will be generated in seperated folders ast, csem, parser & scanner
+ // all the java files will be compiled & the compiled output files will be generated and all the java classes will be generated in seperated folders ast, csem, parser & scanner
 
  >java rpal20 <filename.extension>
 
